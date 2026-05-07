@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hasnat — WordPress, SEO & Content Specialist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0e;
+      --surface: #161616;
+      --border: #2a2a2a;
+      --text: #e8e3dc;
+      --muted: #7a7570;
+      --accent: #c8a96e;
+      --accent-dim: rgba(200,169,110,0.12);
+      --green: #6bbf8e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 3rem;
+      background: rgba(14,14,14,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 3rem 4rem;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-left { animation: fadeUp 0.9s ease both; }
+    .hero-right { animation: fadeUp 0.9s 0.2s ease both; }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,169,110,0.3);
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      margin-bottom: 2.2rem;
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0e0e0e;
+      padding: 0.75rem 1.8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      padding: 0.75rem 1.8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+
+    /* Hero stats card */
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-item {}
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.7rem;
+      font-family: 'DM Mono', monospace;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .skill-tag:hover { color: var(--text); border-color: var(--muted); }
+
+    /* ─── SECTION SHARED ─── */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+    }
+
+    .project-card {
+      background: var(--bg);
+      padding: 2rem;
+      transition: background 0.25s;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .project-card::after {
+      content: '↗';
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 1rem;
+      color: var(--muted);
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .project-card:hover { background: var(--surface); }
+    .project-card:hover::after { color: var(--accent); transform: translate(2px, -2px); }
+
+    .project-type {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .project-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.4rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .project-tag {
+      font-size: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.55rem;
+    }
+
+    .project-tag.highlight {
+      color: var(--green);
+      border-color: rgba(107,191,142,0.3);
+    }
+
+    /* ─── SKILLS SECTION ─── */
+    .skills-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .skill-group { }
+
+    .skill-group-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .skill-bar-item {
+      margin-bottom: 1.1rem;
+    }
+
+    .skill-bar-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .skill-bar-pct {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .skill-bar-bg {
+      height: 2px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      background: var(--accent);
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .skill-bar-fill.green { background: var(--green); }
+
+    /* ─── EXPERIENCE ─── */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .exp-item:first-child { border-top: 1px solid var(--border); }
+
+    .exp-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-top: 0.2rem;
+    }
+
+    .exp-content {}
+
+    .exp-role {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .exp-company {
+      font-size: 0.82rem;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+      letter-spacing: 0.04em;
+    }
+
+    .exp-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-wrap::before {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(200,169,110,0.06), transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .contact-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .contact-info {
+      font-size: 0.88rem;
+    }
+
+    .contact-info span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.1rem;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .contact-info a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .contact-info a:hover { color: var(--accent); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .footer-built {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-built span { color: var(--accent); }
+
+    /* ─── DIVIDER ─── */
+    .full-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 100%;
+      margin: 0;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 2.5rem; }
+      .hero-right { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .skills-layout { grid-template-columns: 1fr; }
+      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .contact-wrap { grid-template-columns: 1fr; padding: 2.5rem; gap: 2.5rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Hasnat.</div>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Available for hire · Chittagong, BD</div>
+      <h1>WordPress,<br><em>SEO</em> &<br>Content Specialist</h1>
+      <p class="hero-desc">
+        I build and optimize WordPress websites using Elementor Pro, write technical documentation for SaaS products, and drive organic growth through SEO — from local campaigns to full content strategies.
+      </p>
+      <div class="hero-cta">
+        <a href="#work" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-ghost">Hire Me</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Live Sites Built</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">3+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">5</div>
+            <div class="stat-label">Plugin Docs (SaaS)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">Multi</div>
+            <div class="stat-label">Industries Served</div>
+          </div>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Elementor Pro</span>
+          <span class="skill-tag">WordPress</span>
+          <span class="skill-tag">SEO</span>
+          <span class="skill-tag">Local SEO</span>
+          <span class="skill-tag">Technical Content Writing</span>
+          <span class="skill-tag">Lead Generation</span>
+          <span class="skill-tag">WordPress Automation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="full-divider" />
+
+  <!-- PROJECTS -->
+  <section id="work">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Selected Work</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="projects-grid">
+
+      <a href="https://southwind-bd.com/" target="_blank" class="project-card">
+        <div class="project-type">B2B · Marine Industry · Bangladesh</div>
+        <div class="project-name">Southwind Marine Trade</div>
+        <p class="project-desc">Corporate website for a leading ship chandler operating across Chittagong, Mongla, and Payra ports. Built with Elementor Pro with full SEO optimization and structured service architecture targeting maritime industry keywords.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Elementor Pro</span>
+          <span class="project-tag highlight">SEO</span>
+          <span class="project-tag">WordPress</span>
+          <span class="project-tag">B2B</span>
+        </div>
+      </a>
+
+      <a href="https://airconditioningmaintenancetabuk.com/" target="_blank" class="project-card">
+        <div class="project-type">Local SEO · HVAC · Saudi Arabia</div>
+        <div class="project-name">AC Maintenance Tabuk</div>
+        <p class="project-desc">Arabic-language local business site for an HVAC service company in Tabuk. Includes full on-page SEO with Arabic keywords, FAQ schema markup, service sub-pages, and WhatsApp CTA integration for lead capture.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Local SEO</span>
+          <span class="project-tag highlight">Elementor Pro</span>
+          <span class="project-tag">Arabic RTL</span>
+          <span class="project-tag">Schema Markup</span>
+        </div>
+      </a>
+
+      <a href="https://refsmedia.co.uk/" target="_blank" class="project-card">
+        <div class="project-type">Media & Content · United Kingdom</div>
+        <div class="project-name">Refs Media</div>
+        <p class="project-desc">Content and media company website for a UK-based client. Focused on clean layout, brand presentation, and SEO-ready content structure for organic visibility in a competitive market.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Elementor Pro</span>
+          <span class="project-tag highlight">SEO</span>
+          <span class="project-tag">WordPress</span>
+          <span class="project-tag">UK Market</span>
+        </div>
+      </a>
+
+      <a href="https://chittagongsoftware.com/" target="_blank" class="project-card">
+        <div class="project-type">Tech / Software · Chittagong, BD</div>
+        <div class="project-name">Chittagong Software</div>
+        <p class="project-desc">WordPress site for a local software company. Handled both design implementation with Elementor Pro and on-page SEO strategy targeting Chittagong-based technology service keywords.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Elementor Pro</span>
+          <span class="project-tag highlight">Local SEO</span>
+          <span class="project-tag">WordPress</span>
+        </div>
+      </a>
+
+      <a href="https://tabukharaj.org/" target="_blank" class="project-card">
+        <div class="project-type">NGO / Organization · Saudi Arabia</div>
+        <div class="project-name">Tabuk Haraj</div>
+        <p class="project-desc">Organizational website built and optimized with Elementor Pro. Included SEO implementation and structured content to improve visibility for the organization's services in the Tabuk region.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Elementor Pro</span>
+          <span class="project-tag">SEO</span>
+          <span class="project-tag">WordPress</span>
+        </div>
+      </a>
+
+      <a href="https://bit-form.com/" target="_blank" class="project-card">
+        <div class="project-type">SaaS · WordPress Plugin · Bit Apps</div>
+        <div class="project-name">Bit Form — Knowledge Base</div>
+        <p class="project-desc">Technical documentation and SEO content for Bit Form, a WordPress form builder plugin. Wrote knowledge base articles covering plugin setup, CSS customization, hCaptcha integration, and field configuration — all optimized with RankMath and structured for featured snippets.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Technical Content Writing</span>
+          <span class="project-tag highlight">SEO</span>
+          <span class="project-tag">WordPress</span>
+          <span class="project-tag">Documentation</span>
+        </div>
+      </a>
+
+      <a href="https://bit-integrations.com/" target="_blank" class="project-card">
+        <div class="project-type">SaaS · WordPress Plugin · Bit Apps</div>
+        <div class="project-name">Bit Integrations — Knowledge Base</div>
+        <p class="project-desc">Wrote the full documentation for Bit Integrations, a plugin that connects WordPress forms to 300+ third-party tools. Articles cover connection setup, trigger/action configuration, and troubleshooting for integrations including Google Sheets, Mailchimp, Slack, and more.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Technical Content Writing</span>
+          <span class="project-tag highlight">SEO</span>
+          <span class="project-tag">WordPress</span>
+          <span class="project-tag">Documentation</span>
+        </div>
+      </a>
+
+      <a href="https://bit-flows.com/" target="_blank" class="project-card">
+        <div class="project-type">SaaS · WordPress Automation · Bit Apps</div>
+        <div class="project-name">Bit Flows — Knowledge Base</div>
+        <p class="project-desc">Produced technical documentation for Bit Flows, a WordPress automation plugin. Covered workflow creation, trigger and action configuration, conditional logic, and automation use cases — written for non-technical users with beginner-friendly language.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Technical Content Writing</span>
+          <span class="project-tag highlight">WordPress Automation</span>
+          <span class="project-tag">SEO</span>
+          <span class="project-tag">Documentation</span>
+        </div>
+      </a>
+
+      <a href="https://paymentform.io/" target="_blank" class="project-card">
+        <div class="project-type">SaaS · Payment Platform · Bit Apps</div>
+        <div class="project-name">PaymentForm.io — Knowledge Base</div>
+        <p class="project-desc">Built the complete documentation knowledge base for PaymentForm.io, an online payment collection platform. Wrote setup guides, gateway integration docs, and feature articles tailored to non-technical business users — with full SEO optimization across all pages.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Technical Content Writing</span>
+          <span class="project-tag highlight">SEO</span>
+          <span class="project-tag">SaaS Docs</span>
+          <span class="project-tag">Documentation</span>
+        </div>
+      </a>
+
+      <div class="project-card" style="cursor:default;">
+        <div class="project-type">SaaS · CRM · Bit Apps · Ongoing</div>
+        <div class="project-name">Bit CRM — Knowledge Base <span style="font-size:0.7rem; color:var(--accent); font-family:'DM Mono',monospace; font-style:normal;">(In Progress)</span></div>
+        <p class="project-desc">Currently writing the documentation for Bit CRM, an upcoming WordPress CRM plugin by Bit Apps. The project is in active development — documentation is being written in parallel with the product before public launch.</p>
+        <div class="project-tags">
+          <span class="project-tag highlight">Technical Content Writing</span>
+          <span class="project-tag highlight">SEO</span>
+          <span class="project-tag">WordPress</span>
+          <span class="project-tag">CRM</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="full-divider" />
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Skills & Proficiency</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="skills-layout">
+      <div class="skill-group">
+        <div class="skill-group-title">WordPress & Web</div>
+
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>Elementor Pro</span><span class="skill-bar-pct">88%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="88"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>WordPress</span><span class="skill-bar-pct">85%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>WordPress Automation</span><span class="skill-bar-pct">80%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="80"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>Technical Content Writing</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">SEO & Growth</div>
+
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>On-Page SEO</span><span class="skill-bar-pct">90%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill green" data-width="90"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>Local SEO</span><span class="skill-bar-pct">85%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill green" data-width="85"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>Keyword Research</span><span class="skill-bar-pct">85%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill green" data-width="85"></div></div>
+        </div>
+        <div class="skill-bar-item">
+          <div class="skill-bar-top"><span>Lead Generation</span><span class="skill-bar-pct">80%</span></div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill green" data-width="80"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="full-divider" />
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Experience</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="exp-list">
+
+      <div class="exp-item">
+        <div class="exp-date">Jan 2025 — Present</div>
+        <div class="exp-content">
+          <div class="exp-role">Technical Content Writer & SEO</div>
+          <div class="exp-company">Bitcode Technologies Ltd. (Bit Apps) — Khulshi, Chittagong, BD</div>
+          <p class="exp-desc">Wrote and maintained the complete knowledge base for five WordPress plugins: Bit Form, Bit Integrations, Bit Flows, Bit Assist, and Bit Social — plus ongoing documentation for Bit CRM (pre-launch) and PaymentForm.io. Produced beginner-friendly articles covering plugin setup, integrations, CSS customization, and feature walkthroughs. Applied on-page SEO across all docs with structured headings, focus keywords, meta descriptions, and FAQ schema.</p>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">May — Nov 2025</div>
+        <div class="exp-content">
+          <div class="exp-role">SEO Specialist</div>
+          <div class="exp-company">Choicebird International Limited — UK Marketing Agency (Remote)</div>
+          <p class="exp-desc">Worked as an SEO Specialist for a UK-based digital marketing agency. Responsible for keyword research, on-page SEO implementation, content optimization, and organic growth strategies for client websites across multiple industries.</p>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">May — Nov 2025</div>
+        <div class="exp-content">
+          <div class="exp-role">SEO Specialist</div>
+          <div class="exp-company">Chittagong Software — Agrabad, Chittagong, BD</div>
+          <p class="exp-desc">Concurrent role at a local software and marketing company. Handled SEO audits, keyword strategy, on-page optimization, and content planning to improve search visibility for the company and client projects.</p>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Feb — Apr 2025</div>
+        <div class="exp-content">
+          <div class="exp-role">Local SEO Intern</div>
+          <div class="exp-company">EasyGrow Digital — Dewanhat, Chittagong, BD</div>
+          <p class="exp-desc">Managed local SEO campaigns for service businesses. Handled Google Business Profile optimization, local citation building, and on-page improvements for clients including HVAC companies, electrical contractors, limousine services, and consulting firms across the US market.</p>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Oct 2024 — Jan 2025</div>
+        <div class="exp-content">
+          <div class="exp-role">Lead Generation Specialist</div>
+          <div class="exp-company">Freelance — Remote</div>
+          <p class="exp-desc">Collected, filtered, and verified B2B leads from LinkedIn using search and filter techniques. Organized and maintained lead data in structured Google Sheets for client outreach campaigns, ensuring data accuracy and relevance to target audience criteria.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="full-divider" />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-wrap">
+      <div>
+        <h2 class="contact-heading">Let's work<br><em style="font-style:italic; color:var(--accent)">together.</em></h2>
+        <p class="contact-sub">I'm currently open to full-time WordPress & Elementor roles in Chittagong. If you're looking for someone who can build, optimize, and deliver — let's talk.</p>
+        <a href="mailto:your@email.com" class="btn-primary">Send an Email</a>
+      </div>
+      <div class="contact-details">
+        <div class="contact-row">
+          <div class="contact-icon">✉</div>
+          <div class="contact-info">
+            <span>Email</span>
+            <a href="mailto:your@email.com">your@email.com</a>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">📍</div>
+          <div class="contact-info">
+            <span>Location</span>
+            Chittagong, Bangladesh
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">💼</div>
+          <div class="contact-info">
+            <span>Status</span>
+            Available for Full-Time
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">🎓</div>
+          <div class="contact-info">
+            <span>Certification</span>
+            Semrush SEO Certificate
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-copy">© 2026 Hasnat — All rights reserved.</div>
+    <div class="footer-built">WordPress · SEO · Content · <span>Chittagong, BD</span></div>
+  </footer>
+
+  <script>
+    // Animate skill bars on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('#skills').forEach(el => observer.observe(el));
+
+    // Stagger project cards on load
+    document.querySelectorAll('.project-card').forEach((card, i) => {
+      card.style.animationDelay = `${i * 0.08}s`;
+      card.style.animation = 'fadeUp 0.6s ease both';
+    });
+  </script>
+
+</body>
+</html>
